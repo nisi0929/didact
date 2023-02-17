@@ -3,7 +3,7 @@ function createElement(type, props, ...children) {
     type,
     props: {
       ...props,
-      children: children.map(child =>
+      children: children.map((child) =>
         typeof child === "object"
           ? child
           : createTextElement(child)
@@ -33,22 +33,23 @@ function createDom(fiber) {
   return dom
 }
 
-const isEvent = key => key.startsWith("on")
-const isProperty = key =>
+const isEvent = (key) => key.startsWith("on")
+const isProperty = (key) =>
   key !== "children" && !isEvent(key)
-const isNew = (prev, next) => key =>
+const isNew = (prev, next) => (key) =>
   prev[key] !== next[key]
-const isGone = (prev, next) => key => !(key in next)
+const isGone = (prev, next) => (key) =>
+  !(key in next)
 function updateDom(dom, prevProps, nextProps) {
   //Remove old or changed event listeners
   Object.keys(prevProps)
     .filter(isEvent)
     .filter(
-      key =>
+      (key) =>
         !(key in nextProps) ||
         isNew(prevProps, nextProps)(key)
     )
-    .forEach(name => {
+    .forEach((name) => {
       const eventType = name
         .toLowerCase()
         .substring(2)
@@ -62,7 +63,7 @@ function updateDom(dom, prevProps, nextProps) {
   Object.keys(prevProps)
     .filter(isProperty)
     .filter(isGone(prevProps, nextProps))
-    .forEach(name => {
+    .forEach((name) => {
       dom[name] = ""
     })
 
@@ -70,7 +71,7 @@ function updateDom(dom, prevProps, nextProps) {
   Object.keys(nextProps)
     .filter(isProperty)
     .filter(isNew(prevProps, nextProps))
-    .forEach(name => {
+    .forEach((name) => {
       dom[name] = nextProps[name]
     })
 
@@ -78,7 +79,7 @@ function updateDom(dom, prevProps, nextProps) {
   Object.keys(nextProps)
     .filter(isEvent)
     .filter(isNew(prevProps, nextProps))
-    .forEach(name => {
+    .forEach((name) => {
       const eventType = name
         .toLowerCase()
         .substring(2)
@@ -214,11 +215,11 @@ function useState(initial) {
   }
 
   const actions = oldHook ? oldHook.queue : []
-  actions.forEach(action => {
+  actions.forEach((action) => {
     hook.state = action(hook.state)
   })
 
-  const setState = action => {
+  const setState = (action) => {
     hook.queue.push(action)
     wipRoot = {
       dom: currentRoot.dom,
@@ -309,11 +310,12 @@ const Didact = {
 function Counter() {
   const [state, setState] = Didact.useState(1)
   return (
-    <h1 onClick={() => setState(c => c + 1)}>
+    <h1 onClick={() => setState((c) => c + 1)}>
       Count: {state}
     </h1>
   )
 }
 const element = <Counter />
 const container = document.getElementById("root")
+console.log(container)
 Didact.render(element, container)
