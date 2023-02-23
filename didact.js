@@ -1,4 +1,8 @@
-//  これで後にDOM要素となるオブジェクトを作成する
+/*
+ これで後にDOM要素となるオブジェクトを作成する
+後に出てくるelementはcreateElementでjavascriptにわかる形にされる
+childrenに含まれる値はオブジェクトかそうでないかを見てそうでないならcreateTextElementを呼ぶ
+ */
 const createElement = (
   type,
   props,
@@ -31,19 +35,18 @@ const Didact = {
   createElement,
 }
 
-const element = Didact.createElement(
-  "div",
-  { id: "foo" },
-  Didact.createElement("a", null, "bar"),
-  Didact.createElement("b")
-)
-console.log(element)
-
+/*
+このコメントアウトはjsxで書かれた記述をjsに直す際にDidact.createElementを使用してjsに直している
+jsx記法を実際にトランスパイルしているのはbabelでブラウザで確認できるのはtext/babelでhtml内のscriptがこのファイルを読み込んでいるから
+多分@babel/plugin-transform-react-jsxでjsxをjsに解釈している
+ここを見ればわかりそう（https://babeljs.io/docs/babel-plugin-transform-react-jsx）
+（ソースコード読むまではしてません）
+ */
 /** @jsx Didact.createElement */
-const element2 = (
+const element = (
   <div id="foo">
     <a>bar</a>
     <b />
   </div>
 )
-console.log(element2)
+console.log(element)
